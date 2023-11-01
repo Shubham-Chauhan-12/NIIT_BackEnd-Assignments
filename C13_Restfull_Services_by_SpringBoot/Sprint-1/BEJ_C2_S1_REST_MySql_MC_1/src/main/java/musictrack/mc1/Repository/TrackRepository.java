@@ -1,0 +1,14 @@
+package musictrack.mc1.Repository;
+
+import musictrack.mc1.Domain.Track;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface TrackRepository extends JpaRepository<Track,Integer> {
+
+
+    List<Track> findByTrackName(String trackName);
+}
