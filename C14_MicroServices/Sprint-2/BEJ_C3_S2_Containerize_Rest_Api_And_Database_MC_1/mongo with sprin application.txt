@@ -1,0 +1,251 @@
+Microsoft Windows [Version 10.0.22000.1281]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Acer>docker images
+REPOSITORY     TAG       IMAGE ID       CREATED          SIZE
+productimage   latest    b150dda5ca94   28 minutes ago   506MB
+<none>         <none>    ea34d3921ac6   55 minutes ago   506MB
+mysql          latest    a3a2968869cf   2 days ago       538MB
+
+C:\Users\Acer>docker pull mongo:latest
+latest: Pulling from library/mongo
+eaead16dc43b: Pull complete
+8a00eb9f68a0: Pull complete
+f683956749c5: Pull complete
+b33b2f05ea20: Pull complete
+3a342bea915a: Pull complete
+fa956ab1c2f0: Pull complete
+138a8542a624: Pull complete
+0a5a5d2ec822: Pull complete
+37200fef7cf6: Pull complete
+Digest: sha256:8bed0be3e86595283d67836e8d4f3f08916184ea6f2aac7440bda496083ab0c8
+Status: Downloaded newer image for mongo:latest
+docker.io/library/mongo:latest
+
+C:\Users\Acer>docker images
+REPOSITORY     TAG       IMAGE ID       CREATED          SIZE
+productimage   latest    b150dda5ca94   30 minutes ago   506MB
+<none>         <none>    ea34d3921ac6   57 minutes ago   506MB
+mysql          latest    a3a2968869cf   2 days ago       538MB
+mongo          latest    2dd27bb6d3e6   2 weeks ago      695MB
+
+C:\Users\Acer>docker network ls
+NETWORK ID     NAME           DRIVER    SCOPE
+1188a4296df6   bridge         bridge    local
+f903b186371a   host           host      local
+f02a8dae6ff3   mynetworksql   bridge    local
+fe9b4314a3d4   none           null      local
+
+
+
+C:\Users\Acer>docker run -it --network mynetworksql --name mongocon1 -d  mongo:latest
+633d3f1b771155e650c9ec8d19ebbf37af73e683809851c2bf15adb18bbde9b9
+
+C:\Users\Acer>docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED             STATUS                          PORTS                 NAMES
+633d3f1b7711   mongo:latest   "docker-entrypoint.s…"   21 seconds ago      Up 19 seconds                   27017/tcp             mongocon1
+41d90c750194   mongo:latest   "docker-entrypoint.s…"   3 minutes ago       Exited (0) About a minute ago                         mongocon
+b7ea7d313801   productimage   "java -jar demo-0.0.…"   33 minutes ago      Exited (143) 29 minutes ago                           productcontainer2
+0a23099e1e5b   productimage   "java -jar demo-0.0.…"   35 minutes ago      Exited (1) 35 minutes ago                             productcontainer1
+e0e10f9ee29d   ea34d3921ac6   "java -jar demo-0.0.…"   59 minutes ago      Exited (1) 59 minutes ago                             productcontainer
+99a584ebc75c   mysql:latest   "docker-entrypoint.s…"   About an hour ago   Up About an hour                3306/tcp, 33060/tcp   mysqlcontainer1
+
+C:\Users\Acer>docker exec -it mongocon1 bash
+root@633d3f1b7711:/# mogosh
+bash: mogosh: command not found
+root@633d3f1b7711:/# mongosh
+Current Mongosh Log ID: 6389a1c9540789eccd7c7018
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.6.0
+Using MongoDB:          6.0.3
+Using Mongosh:          1.6.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2022-12-02T06:50:36.740+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2022-12-02T06:50:37.286+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2022-12-02T06:50:37.286+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+   2022-12-02T06:50:37.286+00:00: vm.max_map_count is too low
+------
+
+------
+   Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+   metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+   The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+   and anyone you share the URL with. MongoDB may use this information to make product
+   improvements and to suggest MongoDB products and deployment options to you.
+
+   To enable free monitoring, run the following command: db.enableFreeMonitoring()
+   To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+------
+
+test> use customerdb
+switched to db customerdb
+customerdb> db.customer.find()
+[
+  {
+    _id: 1,
+    customerName: 'shikhar agrahari',
+    customerPhoneNo: '789456123',
+    product: {
+      productId: 101,
+      productName: 'oppo',
+      productDescription: 'it is tech company'
+    },
+    _class: 'com.example.Restfuldemomongodb.domain.Customer'
+  }
+]
+====================================================================================================================================================
+
+
+
+
+
+server.port=8082
+spring.data.mongodb.uri=mongodb://mongocon1:27017/customerdb
+server.error.include-message=always
+spring.jpa.hibernate.ddl_auto=create
+
+
+
+
+
+
+
+
+
+
+====================================================================================================================================================
+
+
+
+FROM openjdk
+WORKDIR usr/lib
+ADD ./target/Restful-demo-mongodb-0.0.1-SNAPSHOT.jar /usr/lib/Restful-demo-mongodb-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","Restful-demo-mongodb-0.0.1-SNAPSHOT.jar"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+====================================================================================================================================================
+PS C:\Users\Acer\Desktop\Restful-demo-mongodb> docker build -t customerimage .
+cketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2022-12-02 07:01:13.408  INFO 1 --- [mongocon1:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:8}] to mongocon1:27017
+2022-12-02 07:01:13.408  INFO 1 --- [mongocon1:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:2, serverValue:9}] to mongocon1:27017
+2022-12-02 07:01:13.409  INFO 1 --- [mongocon1:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=mongocon1:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=17, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=26970200}
+2022-12-02 07:01:14.110  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path ''
+2022-12-02 07:01:14.122  INFO 1 --- [           main] c.e.R.RestfulDemoMongodbApplication      : Started RestfulDemoMongodbApplication in 3.018 seconds (JVM running for 3.68)
+2022-12-02 07:04:36.399  INFO 1 --- [nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-12-02 07:04:36.399  INFO 1 --- [nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-12-02 07:04:36.400  INFO 1 --- [nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-12-02 07:04:36.627  INFO 1 --- [nio-8082-exec-2] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:3, serverValue:10}] to mongocon1:27017
+
+
+
+
+
+
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Acer\Desktop\Restful-demo-mongodb> docker build -t customerimage .                                                       
+[+] Building 1.9s (8/8) FINISHED
+ => [internal] load build definition from Dockerfile                                                                                                                                                    0.0s
+ => => transferring dockerfile: 32B                                                                                                                                                                     0.0s
+ => [internal] load .dockerignore                                                                                                                                                                       0.0s
+ => => transferring context: 2B                                                                                                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/openjdk:latest                                                                                                                                       1.7s
+ => [internal] load build context                                                                                                                                                                       0.0s
+ => => transferring context: 96B                                                                                                                                                                        0.0s
+ => [1/3] FROM docker.io/library/openjdk@sha256:d2c0bd4450268777610fab98fcf3ee713e5f2cc07180969893d7d99483fafa66                                                                                        0.0s
+ => CACHED [2/3] WORKDIR usr/lib                                                                                                                                                                        0.0s
+ => CACHED [3/3] ADD ./target/Restful-demo-mongodb-0.0.1-SNAPSHOT.jar /usr/lib/Restful-demo-mongodb-0.0.1-SNAPSHOT.jar                                                                                  0.0s
+ => exporting to image                                                                                                                                                                                  0.0s
+ => => exporting layers                                                                                                                                                                                 0.0s
+ => => writing image sha256:98fa442757f33631f1e9a3f286da40e6e4b91984dc00202bd59b6c6365d48eea                                                                                                            0.0s
+ => => naming to docker.io/library/customerimage                                                                                                                                                        0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+PS C:\Users\Acer\Desktop\Restful-demo-mongodb> docker run -p 8082:8082 --name customercontainer1  --network mynetworksql customerimage
+docker: Error response from daemon: Conflict. The container name "/customercontainer1" is already in use by container "127440da774cc976f280df39297036258292b1d7b0e21c3dbafae98effc3be4f". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
+PS C:\Users\Acer\Desktop\Restful-demo-mongodb> docker run -p 8082:8082 --name customercontainer2   --network mynetworksql customerimage
+docker: Error response from daemon: driver failed programming external connectivity on endpoint customercontainer2 (bb8e371b3439f30470c6ce78a2098a35553920eb75cea10f02db081a5b553d5e): Bind for 0.0.0.0:8082 failed: port is already allocated.
+PS C:\Users\Acer\Desktop\Restful-demo-mongodb> docker run -p 8082:8082 --name customercontainer2   --network mynetworksql customerimage
+docker: Error response from daemon: Conflict. The container name "/customercontainer2" is already in use by container "e45a4b6b9f15914e7908635cb02b514df53600ad6f2e0b0ce51425e3e6207d82". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
+PS C:\Users\Acer\Desktop\Restful-demo-mongodb> docker run -p 8082:8082 --name customercontainer3   --network mynetworksql customerimage
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.5)
+
+2022-12-02 07:10:06.481  INFO 1 --- [           main] c.e.R.RestfulDemoMongodbApplication      : Starting RestfulDemoMongodbApplication v0.0.1-SNAPSHOT using Java 18.0.2.1 on 39921e8d310c with PID 1 (/usr/lib/Restful-demo-mongodb-0.0.1-SNAPSHOT.jar started by root in /usr/lib)
+2022-12-02 07:10:06.485  INFO 1 --- [           main] c.e.R.RestfulDemoMongodbApplication      : No active profile set, falling back to 1 default profile: "default"
+2022-12-02 07:10:07.363  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2022-12-02 07:10:07.413  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 46 ms. Found 1 MongoDB repository interfaces.
+2022-12-02 07:10:07.975  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8082 (http)
+2022-12-02 07:10:07.984  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-12-02 07:10:07.984  INFO 1 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-12-02 07:10:08.059  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-12-02 07:10:08.059  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1470 ms
+2022-12-02 07:10:08.261  INFO 1 --- [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.6.1"}, "os
+": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "5.10.16.3-microsoft-standard-WSL2"}, "platform": "Java/Oracle Corporation/18.0.2.1+1-1"} created with settings MongoClientSettings
+{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, streamFactoryFactory=nul
+l, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, Iterable
+CodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.Jep395RecordC
+odecProvider@28ec166e]}, clusterSettings={hosts=[mongocon1:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='
+[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=So
+cketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLi
+feTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, min
+HeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2022-12-02 07:10:08.286  INFO 1 --- [mongocon1:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:11}] to mongocon1:27017
+2022-12-02 07:10:08.286  INFO 1 --- [mongocon1:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:2, serverValue:12}] to mongocon1:27017
+2022-12-02 07:10:08.287  INFO 1 --- [mongocon1:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=mongocon1:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=17, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=25531400}
+2022-12-02 07:10:09.057  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path ''
+2022-12-02 07:10:09.077  INFO 1 --- [           main] c.e.R.RestfulDemoMongodbApplication      : Started RestfulDemoMongodbApplication in 3.128 seconds (JVM running for 3.803)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+====================================================================================================================================================

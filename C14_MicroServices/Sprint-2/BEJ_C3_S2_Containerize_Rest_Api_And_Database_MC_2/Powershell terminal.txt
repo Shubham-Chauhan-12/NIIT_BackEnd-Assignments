@@ -1,0 +1,73 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Try the new cross-platform PowerShell https://aka.ms/pscore6
+
+PS C:\Users\shubh> docker images
+REPOSITORY      TAG       IMAGE ID       CREATED       SIZE
+customerimage   latest    e95d384705b8   2 hours ago   490MB
+mysql           latest    a3a2968869cf   2 days ago    538MB
+mongo           latest    2dd27bb6d3e6   2 weeks ago   695MB
+
+
+
+PS C:\Users\shubh> docker network ls
+NETWORK ID     NAME               DRIVER    SCOPE
+90c612dc686f   MyNetworkSql       bridge    local
+afd3db25a1b7   ShubhamNetwork     bridge    local
+fc23e41fbea7   UserNetworkMongo   bridge    local
+83f9ebb9caa3   bridge             bridge    local
+6da4afd0fca9   host               host      local
+bcf556bcb118   none               null      local
+
+
+
+
+PS C:\Users\shubh> docker run -it --network MyNetworkSql --name mysqlcontainer1 -e MYSQL_ROOT_PASSWORD=root123 -d mysql:latest
+465ac31caab12539a5f24fee449aebb4f49e7c62eb7ece3bce8de47bcdf8cdf6
+
+
+
+
+PS C:\Users\shubh> docker ps -a
+CONTAINER ID   IMAGE           COMMAND                  CREATED          STATUS                        PORTS                 NAMES
+465ac31caab1   mysql:latest    "docker-entrypoint.s…"   15 seconds ago   Up 11 seconds                 3306/tcp, 33060/tcp   mysqlcontainer1
+c932dfaee76b   customerimage   "java -jar sprint3pc…"   2 hours ago      Exited (143) 25 minutes ago                         customermongocontainer
+89344a886a3a   mongo:latest    "docker-entrypoint.s…"   3 hours ago      Up 3 hours                    27017/tcp             mongocontainer1
+
+
+
+PS C:\Users\shubh> docker exec -it mysqlcontainer1 bash
+bash-4.4# mysql -u root -p
+Enter password:
+
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+    -> create database customerDetail;
+
+
+mysql> use customerDetail;
+Database changed
+
+
+mysql> select * from product;
++------------+-----------------+---------------------+--------------+
+| product_id | amount_in_stock | product_description | product_name |
++------------+-----------------+---------------------+--------------+
+|         21 |              15 | Mobile Company      | Nokia        |
+|         22 |              41 | Mobile Company      | Samsung      |
++------------+-----------------+---------------------+--------------+
+2 rows in set (0.00 sec)
+
+mysql>

@@ -1,0 +1,80 @@
+ubuntu@ip-172-31-42-151:~/Desktop$ sudo service mongod status
+● mongod.service - MongoDB Database Server
+     Loaded: loaded (/lib/systemd/system/mongod.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) since Wed 2022-11-30 21:46:39 IST; 43min ago
+       Docs: https://docs.mongodb.org/manual
+    Process: 684 ExecStart=/usr/bin/mongod --config /etc/mongod.conf (code=exited, status=0/SUCCESS)
+   Main PID: 684 (code=exited, status=0/SUCCESS)
+
+Nov 30 21:24:07 ip-172-31-42-151 systemd[1]: Started MongoDB Database Server.
+Nov 30 21:46:38 ip-172-31-42-151 systemd[1]: Stopping MongoDB Database Server...
+Nov 30 21:46:39 ip-172-31-42-151 systemd[1]: mongod.service: Succeeded.
+Nov 30 21:46:39 ip-172-31-42-151 systemd[1]: Stopped MongoDB Database Server.
+ubuntu@ip-172-31-42-151:~/Desktop$ sudo docker pull mongo:latest
+latest: Pulling from library/mongo
+Digest: sha256:8bed0be3e86595283d67836e8d4f3f08916184ea6f2aac7440bda496083ab0c8
+Status: Image is up to date for mongo:latest
+docker.io/library/mongo:latest
+ubuntu@ip-172-31-42-151:~/Desktop$ sudo docker run -d -p 27017:27017 --name mongoDbContainer1 mongo:latest
+bf16c6a01bd86a5cd1495ec7c9a2537f3bb3067aa32b02a0fd380d893e272627
+ubuntu@ip-172-31-42-151:~/Desktop$ sudo docker ps -a
+CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS                   PORTS                                           NAMES
+bf16c6a01bd8   mongo:latest                "docker-entrypoint.s…"   16 seconds ago   Up 13 seconds            0.0.0.0:27017->27017/tcp, :::27017->27017/tcp   mongoDbContainer1
+6d849ba329cf   mysql/mysql-server:latest   "/entrypoint.sh mysq…"   7 hours ago      Exited (0) 5 hours ago                                                   mysqlContainer1
+ubuntu@ip-172-31-42-151:~/Desktop$ mongo
+MongoDB shell version v5.0.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("ab246388-88e0-47ee-8a9c-7c31fa7a4cce") }
+MongoDB server version: 6.0.3
+WARNING: shell and server versions do not match
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+We recommend you begin using "mongosh".
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting: 
+        2022-11-30T17:01:53.803+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+        2022-11-30T17:01:55.210+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+        2022-11-30T17:01:55.210+00:00: vm.max_map_count is too low
+        2022-11-30T17:01:55.210+00:00:         currentValue: 65530
+        2022-11-30T17:01:55.210+00:00:         recommendedMinimum: 1677720
+        2022-11-30T17:01:55.210+00:00:         maxConns: 838860
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> use CustomerDetailsDb
+switched to db CustomerDetailsDb
+> db.Customers.insert({customerName:"Shubham",age:23,address:"Ghaziabad",phoneNumber:98766553,email:"shubham@email.com"})
+WriteResult({ "nInserted" : 1 })
+> db.Customers.insert({customerName:"Ayush",age:25,address:"delhi",phoneNumber:987113,email:"ayush@email.com"})
+WriteResult({ "nInserted" : 1 })
+> db.Customers.find().pretty()
+{
+	"_id" : ObjectId("63878e2f2905d7915e45957e"),
+	"customerName" : "Shubham",
+	"age" : 23,
+	"address" : "Ghaziabad",
+	"phoneNumber" : 98766553,
+	"email" : "shubham@email.com"
+}
+{
+	"_id" : ObjectId("63878ef72905d7915e45957f"),
+	"customerName" : "Ayush",
+	"age" : 25,
+	"address" : "delhi",
+	"phoneNumber" : 987113,
+	"email" : "ayush@email.com"
+}

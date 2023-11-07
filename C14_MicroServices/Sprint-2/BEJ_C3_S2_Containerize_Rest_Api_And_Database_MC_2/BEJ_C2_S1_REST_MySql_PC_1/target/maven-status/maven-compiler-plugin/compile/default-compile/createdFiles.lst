@@ -1,0 +1,6 @@
+com\sprint1pc1\Repository\ProductRepository.class
+com\sprint1pc1\Controller\ProductController.class
+com\sprint1pc1\Services\ProductService.class
+com\sprint1pc1\Services\IProductService.class
+com\sprint1pc1\Domain\Product.class
+com\sprint1pc1\ProductApplication.class

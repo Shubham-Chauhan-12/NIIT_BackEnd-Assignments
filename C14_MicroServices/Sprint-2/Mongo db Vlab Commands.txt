@@ -1,0 +1,39 @@
+sudo service mongod status                                    // service status
+
+
+sudo service mongod stop                                       // service stop
+
+
+sudo docker pull mongo:latest                             // pull mongo latest
+
+
+sudo docker images                                                   // docker image
+
+
+sudo docker run -d -p 27017:27017 --name Container1 mongo:latest                                    //create container
+
+
+
+sudo docker ps
+
+
+sudo docker ps -a
+
+
+mongo                                                                              // mongo shell
+
+
+show dbs                                                                       //show existing databse
+
+
+
+student_db                                                                  // create or use db
+
+
+db.StudentRecord.insert({rollNo:101,name:"Shubham"})                                            // insert values in db collection
+
+
+db.StudentRecord.find().pretty()                                                                                               // print db 
+
+
+

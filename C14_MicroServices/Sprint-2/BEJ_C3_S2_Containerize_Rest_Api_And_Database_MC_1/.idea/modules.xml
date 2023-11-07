@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/BEJ_C3_S2_Containerize_Rest_Api_And_Database_MC_1.iml" filepath="$PROJECT_DIR$/.idea/BEJ_C3_S2_Containerize_Rest_Api_And_Database_MC_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Restful-demo-mongodb/Restful-demo-mongodb.iml" filepath="$PROJECT_DIR$/Restful-demo-mongodb/Restful-demo-mongodb.iml" />
+    </modules>
+  </component>
+</project>
