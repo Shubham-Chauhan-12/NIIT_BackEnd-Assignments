@@ -1,0 +1,168 @@
+Web Application
+UI+Business+DA+database---one Server
+
+
+
+
+Movie Application:::
+USerAuthenticationService--Login/Register
+MovieRegisterService----AddMovie
+
+E-Commerce
+USerAuthenticationService--Login/Register
+CustomerService--Addproducttocart,Order,cancel,View
+
+
+
+
+
+Movie Application--Microservice:::
+USerAuthenticationService--8081---mysql
+MovieRegisterService---8082---mongodb
+NotificationService--8084
+PaymentService---8085(add new feature---UPI)
+
+
+E-commerce Application--Microservice:::
+USerAuthenticationService--8081
+CustomerService---8082
+NotificationService--8084
+PaymentService---8085(add new feature---UPI)
+SupplierService--8086
+AdminService--8087
+
+
+
+
+
+
+
+
+MovieApplication--Demo--COncept Session
+UserAutheticationService
+MovieService
+
+
+
+Sprint1:
+UserAutheticationService
+CustomerService
+
+Challenge:
+UserAutheticationService
+MusicTrackService
+
+
+
+
+
+
+
+
+
+
+
+
+
+Steps to create MicroService
+1.Create MavenQuickStartProject
+2.Remove src folder
+3.copy and paste restful services
+4.configure POM(1-parent POM/2-child POM)
+4.a---Parent POM file--add Parent tag(with below 4 lines)
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.5</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+4.b---in Parent POM----add Common dependencies of child services inside Restfulservice project
+spring-boot-web,spring-boot-test,jpa
+
+4.c---in parent POM---add modules tag--specify child Restful Service
+  <modules>
+    <module>UserAuthenticationService</module>
+    <module>UserMovieService</module>
+
+  </modules>
+4.d---in parent POM--add surefire plugin
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <configuration>
+        <useSystemClassLoader>false</useSystemClassLoader>
+      </configuration>
+    </plugin>
+  </plugins>
+
+  </build>
+
+
+
+4.e add Packaging tag in Parent pom
+  <packaging>pom</packaging>
+
+
+
+5.Configure Child POM's
+
+5.a--change Parent tag
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+change above parent in child POM as
+	<parent>
+		 <groupId>com.niit</groupId>
+ 	 	<artifactId>MovieApplication</artifactId>
+  		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+
+5.b Remove commom dependencies like  spring-web,test and JPA
+but have MYSQL or MONGO
+
+
+
+
+To complete Microservice with userAuthetication and MovieService
+How many services need to be running---4(8085/8086/3306/12017)
+RestFul Service running----2
+Database Service running----2
+
+create Docker-compose file
+---add all 4 services
+just docker-compose up --build
+
+
+mysql image
+mongo image
+Dockerfile of UserAuthentication
+Dockerfile of MovieService
+
+docker-compose file--define all 4 services
+
+
+How many services need to be running---6(8081/8082/8085/8086/3306/12017)
+RestFul Service running----4
+Database Service running----2
+
+
+
+
+
+
+
+
+
+
+
+
