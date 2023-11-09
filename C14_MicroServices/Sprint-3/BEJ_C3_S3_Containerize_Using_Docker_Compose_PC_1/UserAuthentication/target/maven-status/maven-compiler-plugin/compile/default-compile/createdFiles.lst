@@ -1,0 +1,10 @@
+com\niit\UserAuthentication\UserAuthenticationApplication.class
+com\niit\UserAuthentication\domain\UserModel.class
+com\niit\UserAuthentication\service\SecurityTokenGeneratorImpl.class
+com\niit\UserAuthentication\service\SecurityTokenGenerator.class
+com\niit\UserAuthentication\repository\UserRepository.class
+com\niit\UserAuthentication\exception\UserNotFoundException.class
+com\niit\UserAuthentication\controller\UserController.class
+com\niit\UserAuthentication\exception\UserAlreadyExistException.class
+com\niit\UserAuthentication\service\UserService.class
+com\niit\UserAuthentication\service\UserServiceImpl.class
