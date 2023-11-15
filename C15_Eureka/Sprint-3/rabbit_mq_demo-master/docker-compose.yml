@@ -1,0 +1,96 @@
+version: '3.9'
+services:
+  product-service2:
+    image: product_image
+    container_name: product-service2
+    build: UserProductService/
+    restart: always
+    networks:
+      - my-network
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongoService2
+      - apigateway
+      - rabbitmqcontainer
+
+  mongoService2:
+    image: mongo
+    container_name: mongoService2
+    ports:
+      - 27017:27017
+    networks:
+      - my-network
+
+  authentication-service2:
+    image: authentication_image
+    container_name: authentication-service2
+    build: UserAuthenticationService/
+    restart: always
+    networks:
+      - my-network
+    ports:
+      - 8084:8084
+    depends_on:
+      - mysqlService2
+      - apigateway
+
+
+  mysqlService2:
+    image: mysql:latest
+    container_name: mysqlService2
+    networks:
+      - my-network
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+  apigateway:
+    container_name: apigateway
+    build: DemoApiGateway/
+    networks:
+      - my-network
+    ports:
+      - 9100:9100
+
+  eureka-service:
+    container_name: eurekacontainer
+    build: EurekaServer/
+    networks:
+      - my-network
+    ports:
+      - 8761:8761
+
+  rabbitmqcontainer:
+    image: rabbitmq:management
+    container_name: rabbitmqcontainer
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - my-network
+    restart: always
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  rabbitmqconsumer:
+    image: rabbitmqconsumer_image
+    container_name: rabbitmqconsumer
+    build: RabbitMQConsumer/
+    restart: always
+    networks:
+      - my-network
+    ports:
+      - 8085:8085
+    depends_on:
+      - mongoService2
+      - rabbitmqcontainer
+
+networks:
+  my-network:
+    driver: bridge
