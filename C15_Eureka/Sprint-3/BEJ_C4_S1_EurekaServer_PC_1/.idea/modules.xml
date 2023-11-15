@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/BEJ_C4_S1_EurekaServer_PC_1.iml" filepath="$PROJECT_DIR$/.idea/BEJ_C4_S1_EurekaServer_PC_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerShop/BEJ_C2_S3_REST_API_MONGODB_PC_1/CustomerService.iml" filepath="$PROJECT_DIR$/CustomerShop/BEJ_C2_S3_REST_API_MONGODB_PC_1/CustomerService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerShop/CustomerShop.iml" filepath="$PROJECT_DIR$/CustomerShop/CustomerShop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerShop/EurekaServer/EurekaServer.iml" filepath="$PROJECT_DIR$/CustomerShop/EurekaServer/EurekaServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerShop/UserAuthentication/UserAuthentication.iml" filepath="$PROJECT_DIR$/CustomerShop/UserAuthentication/UserAuthentication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerShop/apiGateway/apiGateway.iml" filepath="$PROJECT_DIR$/CustomerShop/apiGateway/apiGateway.iml" />
+    </modules>
+  </component>
+</project>
